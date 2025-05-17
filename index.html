@@ -12,6 +12,7 @@
             --secondary-color: #1e40af;
             --success-color: #16a34a;
             --danger-color: #dc2626;
+            --warning-color: #f97316;
             --background-color: #f1f5f9;
             --card-background: #ffffff;
             --text-primary: #1e293b;
@@ -60,6 +61,75 @@
             font-size: 1.1rem;
         }
 
+        /* NEW STYLES FOR GRADING SCALE SECTION */
+        .grading-scale-section {
+            background: var(--card-background);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem; /* Spacing from the form */
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .grading-scale-section summary {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            cursor: pointer;
+            list-style: none; /* Remove default marker */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .grading-scale-section summary::-webkit-details-marker { /* For Chrome/Safari */
+            display: none;
+        }
+        .grading-scale-section summary::after { /* Custom marker */
+            content: '\f078'; /* FontAwesome chevron-down */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            transition: transform 0.2s ease-in-out;
+        }
+        .grading-scale-section[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+
+        .grading-scale-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .grading-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .grading-table th,
+        .grading-table td {
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .grading-table th {
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .grading-table td {
+            color: var(--text-secondary);
+        }
+        .grading-table tbody tr:nth-child(even) {
+            background-color: #f8fafc; /* Slightly different for even rows */
+        }
+        /* END OF NEW STYLES */
+
+
         .subject-block {
             background: var(--card-background);
             border-radius: 1rem;
@@ -67,13 +137,18 @@
             margin-bottom: 1.5rem;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.3s;
         }
 
         .subject-block:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.15);
         }
+
+        .subject-block.calculated {
+            border-left: 5px solid var(--success-color);
+        }
+
 
         .subject-header {
             display: flex;
@@ -84,14 +159,15 @@
             border-bottom: 2px solid var(--border-color);
         }
 
-        .subject-header h3 {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-        }
-
         .form-group {
             margin-bottom: 1.5rem;
         }
+        .form-group-inline {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
 
         label {
             display: block;
@@ -99,8 +175,13 @@
             margin-bottom: 0.5rem;
             color: var(--text-primary);
         }
+        label .info-icon {
+            color: var(--text-secondary);
+            margin-left: 5px;
+            cursor: help;
+        }
 
-        input[type="number"] {
+        input[type="number"], input[type="text"] {
             width: 100%;
             padding: 0.75rem;
             border: 2px solid var(--border-color);
@@ -108,8 +189,12 @@
             font-size: 1rem;
             transition: border-color 0.2s;
         }
+        input[type="number"].input-error, input[type="text"].input-error {
+            border-color: var(--danger-color);
+        }
 
-        input[type="number"]:focus {
+
+        input[type="number"]:focus, input[type="text"]:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
@@ -161,13 +246,17 @@
             cursor: pointer;
             transition: all 0.2s;
         }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
 
         .btn-primary {
             background-color: var(--primary-color);
             color: white;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             background-color: var(--secondary-color);
         }
 
@@ -176,7 +265,7 @@
             color: white;
         }
 
-        .btn-danger:hover {
+        .btn-danger:hover:not(:disabled) {
             background-color: #b91c1c;
         }
 
@@ -185,14 +274,23 @@
             color: white;
         }
 
-        .btn-success:hover {
+        .btn-success:hover:not(:disabled) {
             background-color: #15803d;
         }
+         .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        .btn-warning:hover:not(:disabled) {
+            background-color: #c2410c;
+        }
+
 
         .actions {
             display: flex;
             gap: 1rem;
             margin: 2rem 0;
+            flex-wrap: wrap;
         }
 
         .results-section {
@@ -201,6 +299,7 @@
             padding: 2rem;
             margin-top: 2rem;
             box-shadow: var(--shadow);
+            /* display: none; Initially hidden */
         }
 
         .results-header {
@@ -215,6 +314,7 @@
             border-radius: 0.5rem;
             padding: 1.5rem;
             margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-color);
         }
 
         .overall-GPA {
@@ -231,13 +331,19 @@
             margin-bottom: 0.5rem;
         }
 
-        .error-message {
-            color: var(--danger-color);
+        .error-message, .warning-message {
             font-size: 0.875rem;
             margin-top: 0.5rem;
+            display: block;
+        }
+        .error-message {
+             color: var(--danger-color);
+        }
+        .warning-message {
+            color: var(--warning-color);
         }
 
-        /* Animations */
+
         @keyframes slideIn {
             from {
                 opacity: 0;
@@ -255,14 +361,15 @@
         }
 
         .grade-prediction {
-            background-color: #e9ecef;
+            background-color: #e0e7ff;
+            border: 1px solid var(--primary-color);
             border-radius: 0.5rem;
             padding: 1rem;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
 
         .grade-prediction h4 {
-            color: #2563eb;
+            color: var(--primary-color);
             margin-bottom: 0.5rem;
         }
 
@@ -271,7 +378,7 @@
         }
 
         .grade-prediction .warning {
-            color: #dc2626;
+            color: var(--danger-color);
             font-weight: bold;
         }
 
@@ -300,6 +407,31 @@
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
+
+        #empty-state-message {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .toast-message.show {
+            opacity: 1;
+        }
+
     </style>
 </head>
 
@@ -307,126 +439,241 @@
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-calculator"></i> Professional GPA Calculator</h1>
-            <p>Calculate your Cumulative Point Average (GPA) with ease</p>
+            <p>Calculate your Cumulative Point Average (GPA) with ease. Your data is saved locally!</p>
         </div>
 
+        <details class="grading-scale-section">
+            <summary>
+                View Grading Scale
+                </summary>
+            <table class="grading-table">
+                <thead>
+                    <tr>
+                        <th>Percentage Mark Range</th>
+                        <th>Letter Grade</th>
+                        <th>GPA Point</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>90% or above</td>
+                        <td>A+</td>
+                        <td>4.0000</td>
+                    </tr>
+                    <tr>
+                        <td>80% - 89%</td>
+                        <td>A</td>
+                        <td>4.0000</td>
+                    </tr>
+                    <tr>
+                        <td>75% - 79.99%</td>
+                        <td>A-</td>
+                        <td>3.6666</td>
+                    </tr>
+                    <tr>
+                        <td>70% - 74.99%</td>
+                        <td>B+</td>
+                        <td>3.3333</td>
+                    </tr>
+                    <tr>
+                        <td>65% - 69.99%</td>
+                        <td>B</td>
+                        <td>3.0000</td>
+                    </tr>
+                    <tr>
+                        <td>60% - 64.99%</td>
+                        <td>B-</td>
+                        <td>2.6666</td>
+                    </tr>
+                    <tr>
+                        <td>55% - 59.99%</td>
+                        <td>C+</td>
+                        <td>2.3333</td>
+                    </tr>
+                    <tr>
+                        <td>50% - 54.99%</td>
+                        <td>C</td>
+                        <td>2.0000</td>
+                    </tr>
+                    <tr>
+                        <td>Below 50%</td>
+                        <td>F</td>
+                        <td>0.0000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </details>
         <form id="GPA-form">
             <div id="subject-container">
-                <!-- Subjects will be added here dynamically -->
+                <p id="empty-state-message">No subjects added yet. Click "Add Subject" to begin!</p>
             </div>
 
             <div class="actions">
-                <button type="button" class="btn btn-primary" onclick="addSubject()">
+                <button type="button" class="btn btn-primary" id="add-subject-btn">
                     <i class="fas fa-plus"></i> Add Subject
                 </button>
-                <button type="button" class="btn btn-success" onclick="calculateGPA()">
+                <button type="button" class="btn btn-success" id="calculate-GPA-btn">
                     <i class="fas fa-calculator"></i> Calculate GPA
+                </button>
+                 <button type="button" class="btn btn-warning" id="reset-all-btn">
+                    <i class="fas fa-undo"></i> Reset All
                 </button>
             </div>
         </form>
 
-        <div class="results-section">
+        <div class="results-section" style="display: none;">
             <div class="results-header">
                 <h2><i class="fas fa-chart-bar"></i> Results</h2>
             </div>
             <div id="subject-results"></div>
             <div class="overall-GPA">
                 <h2>Overall GPA</h2>
-                <span id="overall-GPA" style="font-size: 3rem;">0.00</span>
+                <span id="overall-GPA-value" style="font-size: 3rem;">0.00</span>
             </div>
         </div>
     </div>
+    <div id="toast-message" class="toast-message">Data saved!</div>
 
     <script>
         let subjectCount = 0;
         let activeSubjects = new Set();
 
-        // Ensure DOM is fully loaded before attaching event listeners
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('add-subject-btn').addEventListener('click', addSubject);
-            document.getElementById('calculate-GPA-btn').addEventListener('click', calculateGPA);
-        });
+        const subjectContainer = document.getElementById('subject-container');
+        const resultsSection = document.querySelector('.results-section');
+        const overallGPADisplay = document.getElementById('overall-GPA-value');
+        const subjectResultsDisplay = document.getElementById('subject-results');
+        const emptyStateMessage = document.getElementById('empty-state-message');
+        const calculateGpaBtn = document.getElementById('calculate-GPA-btn');
+        const toastMessage = document.getElementById('toast-message');
 
-        function addSubject() {
-            subjectCount++;
-            activeSubjects.add(subjectCount);
 
-            const subjectContainer = document.getElementById('subject-container');
+        function updateEmptyState() {
+            if (activeSubjects.size === 0) {
+                emptyStateMessage.style.display = 'block';
+                resultsSection.style.display = 'none'; // Hide results if no subjects
+            } else {
+                emptyStateMessage.style.display = 'none';
+            }
+        }
+
+        function showToast(message) {
+            toastMessage.textContent = message;
+            toastMessage.classList.add('show');
+            setTimeout(() => {
+                toastMessage.classList.remove('show');
+            }, 3000);
+        }
+
+
+        function addSubject(data = null) {
+            const currentId = data ? data.subjectId : ++subjectCount;
+            if (!data) activeSubjects.add(currentId);
+
             const subjectBlock = document.createElement('div');
             subjectBlock.className = 'subject-block';
-            subjectBlock.id = `subject-block-${subjectCount}`;
+            subjectBlock.id = `subject-block-${currentId}`;
             subjectBlock.innerHTML = `
                 <div class="subject-header">
                     <div class="subject-name">
                         <i class="fas fa-book"></i>
-                        <input type="text" 
-                               name="subject_name_${subjectCount}" 
-                               value="Subject ${subjectCount}"
+                        <input type="text"
+                               name="subject_name_${currentId}"
+                               value="${data ? data.subjectName : `Subject ${currentId}`}"
                                placeholder="Enter subject name"
-                               onchange="saveData()">
+                               oninput="saveDataDebounced()">
                     </div>
-                    <button type="button" class="btn btn-danger" onclick="removeSubject(${subjectCount})">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmRemoveSubject(${currentId})">
                         <i class="fas fa-trash"></i> Remove
                     </button>
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-clock"></i> Credit Hours</label>
-                    <input type="number" name="credit_hours_${subjectCount}" required min="1" placeholder="Enter credit hours">
-                    <span class="error-message" id="error-credit-${subjectCount}"></span>
+                    <label for="credit_hours_${currentId}"><i class="fas fa-clock"></i> Credit Hours</label>
+                    <input type="number" id="credit_hours_${currentId}" name="credit_hours_${currentId}" required min="0.5" step="0.5" placeholder="e.g., 3" value="${data?.creditHours || ''}" oninput="validateInput(this); saveDataDebounced()">
+                    <span class="error-message" id="error-credit-${currentId}"></span>
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-tasks"></i> Has Final Exam</label>
+                    <label><i class="fas fa-tasks"></i> Has Final Exam
+                        <i class="fas fa-info-circle info-icon" title="Does this subject have a final examination component?"></i>
+                    </label>
                     <div class="radio-group">
                         <div class="radio-option">
-                            <input type="radio" id="final-yes-${subjectCount}" name="has_final_${subjectCount}" value="yes" onchange="toggleFinal(${subjectCount}, true)">
-                            <label for="final-yes-${subjectCount}">Yes</label>
+                            <input type="radio" id="final-yes-${currentId}" name="has_final_${currentId}" value="yes" onchange="toggleFinal(${currentId}, true); saveDataDebounced()" ${data?.hasFinal === 'yes' ? 'checked' : ''}>
+                            <label for="final-yes-${currentId}">Yes</label>
                         </div>
                         <div class="radio-option">
-                            <input type="radio" id="final-no-${subjectCount}" name="has_final_${subjectCount}" value="no" onchange="toggleFinal(${subjectCount}, false)">
-                            <label for="final-no-${subjectCount}">No</label>
+                            <input type="radio" id="final-no-${currentId}" name="has_final_${currentId}" value="no" onchange="toggleFinal(${currentId}, false); saveDataDebounced()" ${data?.hasFinal === 'no' || !data ? 'checked' : ''}>
+                            <label for="final-no-${currentId}">No</label>
                         </div>
                     </div>
                 </div>
 
-                <div id="final-section-${subjectCount}" style="display: none;">
+                <div id="final-section-${currentId}" style="display: ${data?.hasFinal === 'yes' ? 'block' : 'none'};">
                     <div class="form-group">
-                        <label><i class="fas fa-percentage"></i> Coursework to Final Exam Ratio</label>
+                        <label><i class="fas fa-percentage"></i> Coursework to Final Exam Ratio
+                             <i class="fas fa-info-circle info-icon" title="Select the weighting of coursework vs. final exam for the total grade."></i>
+                        </label>
                         <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="ratio-50-50-${subjectCount}" name="ratio_split_${subjectCount}" value="50-50">
-                                <label for="ratio-50-50-${subjectCount}">50:50</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="ratio-60-40-${subjectCount}" name="ratio_split_${subjectCount}" value="60-40">
-                                <label for="ratio-60-40-${subjectCount}">60:40</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="ratio-70-30-${subjectCount}" name="ratio_split_${subjectCount}" value="70-30">
-                                <label for="ratio-70-30-${subjectCount}">70:30</label>
-                            </div>
+                            ${['50-50', '60-40', '70-30', '40-60'].map(ratio => `
+                                <div class="radio-option">
+                                    <input type="radio" id="ratio-${ratio}-${currentId}" name="ratio_split_${currentId}" value="${ratio}" onchange="saveDataDebounced()" ${data?.ratioSplit === ratio || (ratio==='50-50' && !data?.ratioSplit) ? 'checked' : ''}>
+                                    <label for="ratio-${ratio}-${currentId}">${ratio.replace('-',':')}</label>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label><i class="fas fa-pen"></i> Final Exam Marks</label>
-                        <input type="number" name="final_mark_${subjectCount}" min="0" max="100" placeholder="Enter final exam marks (out of 100)">
+                        <label for="final_mark_${currentId}"><i class="fas fa-pen"></i> Final Exam Marks (0-100)</label>
+                        <input type="number" id="final_mark_${currentId}" name="final_mark_${currentId}" min="0" max="100" placeholder="Enter final exam marks" value="${data?.finalMark || ''}" oninput="validateInput(this); saveDataDebounced()">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-list-ol"></i> Number of Coursework Parts</label>
-                    <input type="number" name="cw_parts_${subjectCount}" required min="1" onchange="addCourseworkParts(${subjectCount})" placeholder="Enter number of coursework parts">
-                    <span class="error-message" id="error-parts-${subjectCount}"></span>
+                    <label for="cw_parts_${currentId}"><i class="fas fa-list-ol"></i> Number of Coursework Parts</label>
+                    <input type="number" id="cw_parts_${currentId}" name="cw_parts_${currentId}" required min="1" placeholder="e.g., 3" oninput="addCourseworkParts(${currentId}); validateInput(this); saveDataDebounced()" value="${data?.cwPartsCount || '1'}">
+                    <span class="error-message" id="error-parts-${currentId}"></span>
                 </div>
 
-                <div id="cw-parts-section-${subjectCount}">
-                    <!-- Coursework parts will be added here dynamically -->
+                <div id="cw-parts-section-${currentId}">
+                    </div>
+                 <div class="form-group-inline" id="cw-ratio-summary-${currentId}" style="margin-top: 10px;">
+                    <label>Total Coursework Ratio:</label>
+                    <span id="cw-total-ratio-${currentId}" style="font-weight: bold;">0%</span>
+                    <span id="cw-ratio-warning-${currentId}" class="warning-message" style="margin-left:10px;"></span>
                 </div>
             `;
 
             subjectContainer.appendChild(subjectBlock);
+            if (data && data.cwPartsCount > 0) {
+                addCourseworkParts(currentId, data.cwData);
+            } else if (!data) {
+                 addCourseworkParts(currentId);
+            }
+
+            toggleFinal(currentId, data ? data.hasFinal === 'yes' : false);
+            updateEmptyState();
+            subjectBlock.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            const subjectNameInput = subjectBlock.querySelector(`[name="subject_name_${currentId}"]`);
+            if (subjectNameInput && !data) subjectNameInput.focus();
+        }
+
+        function validateInput(inputElement) {
+            inputElement.classList.remove('input-error');
+            const min = parseFloat(inputElement.min);
+            const max = parseFloat(inputElement.max);
+            const value = parseFloat(inputElement.value);
+
+            if (inputElement.value === '') return;
+
+            if ((!isNaN(min) && value < min) || (!isNaN(max) && value > max)) {
+                inputElement.classList.add('input-error');
+                const errorSpan = inputElement.nextElementSibling && inputElement.nextElementSibling.classList.contains('error-message') ? inputElement.nextElementSibling : null;
+                if(errorSpan) showError(inputElement, errorSpan, `Value must be between ${min !== undefined ? min : 'any'} and ${max !== undefined ? max : 'any'}.`)
+            } else {
+                 const errorSpan = inputElement.nextElementSibling && inputElement.nextElementSibling.classList.contains('error-message') ? inputElement.nextElementSibling : null;
+                 if(errorSpan) clearError(inputElement, errorSpan);
+            }
         }
 
 
@@ -436,303 +683,473 @@
         }
 
         function getRatios(subjectId) {
-            const ratioInputs = document.getElementsByName(`ratio_split_${subjectId}`);
-            for (const input of ratioInputs) {
-                if (input.checked) {
-                    const [cw, final] = input.value.split('-');
-                    return [parseInt(cw) / 100, parseInt(final) / 100];
-                }
+            const ratioInput = document.querySelector(`[name="ratio_split_${subjectId}"]:checked`);
+            if (ratioInput) {
+                const [cw, final] = ratioInput.value.split('-');
+                return [parseInt(cw) / 100, parseInt(final) / 100];
             }
-            return [0.5, 0.5]; // Default to 50-50 if none selected
+            return [0.5, 0.5];
         }
 
-        function addCourseworkParts(subjectId) {
+        function addCourseworkParts(subjectId, cwData = null) {
             const numPartsInput = document.querySelector(`[name="cw_parts_${subjectId}"]`);
             const numParts = parseInt(numPartsInput.value);
             const cwPartsSection = document.getElementById(`cw-parts-section-${subjectId}`);
             const errorSpan = document.getElementById(`error-parts-${subjectId}`);
 
+            clearError(numPartsInput, errorSpan);
             if (isNaN(numParts) || numParts < 1) {
-                errorSpan.textContent = "Please enter a valid number of coursework parts (minimum 1)";
+                showError(numPartsInput, errorSpan, "Min 1 part.");
+                cwPartsSection.innerHTML = ''; // Clear parts if invalid number
+                updateTotalCwRatio(subjectId);
                 return;
             }
+            if (numParts > 10) {
+                 showError(numPartsInput, errorSpan, "Max 10 parts.");
+                 cwPartsSection.innerHTML = '';
+                 updateTotalCwRatio(subjectId);
+                 return;
+            }
 
-            errorSpan.textContent = "";
             cwPartsSection.innerHTML = '';
 
             for (let i = 1; i <= numParts; i++) {
+                const partData = cwData ? cwData.find(p => p.partNum === i) : null;
                 const partDiv = document.createElement('div');
-                partDiv.className = 'form-group';
+                partDiv.className = 'form-group cw-part-item';
+                partDiv.style.paddingLeft = '1rem';
+                partDiv.style.borderLeft = '3px solid var(--border-color)';
+                partDiv.style.marginTop = '1rem';
                 partDiv.innerHTML = `
-                <label><i class="fas fa-file-alt"></i> Coursework Part ${i} Marks</label>
-                <input type="number" name="cw_mark_${subjectId}_${i}" min="0" max="100" placeholder="Enter marks (out of 100)">
-                <label><i class="fas fa-balance-scale"></i> Coursework Part ${i} Ratio</label>
-                <input type="number" name="cw_ratio_${subjectId}_${i}" min="0" max="100" placeholder="Enter ratio percentage">
-            `;
+                    <label for="cw_mark_${subjectId}_${i}"><i class="fas fa-file-alt"></i> Coursework Part ${i} Marks (0-100)</label>
+                    <input type="number" id="cw_mark_${subjectId}_${i}" name="cw_mark_${subjectId}_${i}" min="0" max="100" placeholder="Marks" value="${partData?.mark || ''}" oninput="validateInput(this); updateTotalCwRatio(${subjectId}); saveDataDebounced()">
+                    <span class="error-message"></span>
+                    <label for="cw_ratio_${subjectId}_${i}" style="margin-top:0.5rem;"><i class="fas fa-balance-scale"></i> Coursework Part ${i} Ratio (%)
+                        <i class="fas fa-info-circle info-icon" title="The weight of this coursework part out of 100% of the total coursework. All part ratios must sum to 100%."></i>
+                    </label>
+                    <input type="number" id="cw_ratio_${subjectId}_${i}" name="cw_ratio_${subjectId}_${i}" min="0" max="100" placeholder="Ratio %" value="${partData?.ratio || ''}" oninput="validateInput(this); updateTotalCwRatio(${subjectId}); saveDataDebounced()">
+                    <span class="error-message"></span>
+                `;
                 cwPartsSection.appendChild(partDiv);
+            }
+            updateTotalCwRatio(subjectId);
+        }
+
+        function updateTotalCwRatio(subjectId) {
+            const numPartsInput = document.querySelector(`[name="cw_parts_${subjectId}"]`);
+            if (!numPartsInput) return; // In case subject block is being removed
+            const numParts = parseInt(numPartsInput.value) || 0;
+            let currentTotalRatio = 0;
+            for (let i = 1; i <= numParts; i++) {
+                const ratioInput = document.querySelector(`[name="cw_ratio_${subjectId}_${i}"]`);
+                if (ratioInput && ratioInput.value && !ratioInput.classList.contains('input-error')) { // Only sum valid ratios
+                    currentTotalRatio += parseFloat(ratioInput.value);
+                }
+            }
+            const totalRatioDisplay = document.getElementById(`cw-total-ratio-${subjectId}`);
+            const ratioWarningDisplay = document.getElementById(`cw-ratio-warning-${subjectId}`);
+
+            if (!totalRatioDisplay || !ratioWarningDisplay) return; // Elements might not exist if subject is gone
+
+            totalRatioDisplay.textContent = `${currentTotalRatio.toFixed(0)}%`;
+            if (currentTotalRatio !== 100 && numParts > 0) {
+                totalRatioDisplay.style.color = 'var(--warning-color)';
+                ratioWarningDisplay.textContent = "Sum must be 100%!";
+            } else {
+                totalRatioDisplay.style.color = 'var(--success-color)';
+                ratioWarningDisplay.textContent = "";
             }
         }
 
+
         function calculateGPA() {
+            calculateGpaBtn.disabled = true;
+            calculateGpaBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Calculating...';
+
             let totalCredits = 0;
-            let totalWeightedGrade = 0;
-            let subjectResults = '';
+            let totalWeightedGradePoints = 0;
+            let subjectResultsHTML = '';
+            let allInputsValidOverall = true;
 
-            for (const subjectId of activeSubjects) {
-                const creditHoursInput = document.querySelector(`[name="credit_hours_${subjectId}"]`);
+            activeSubjects.forEach(subjectId => {
+                const subjectBlock = document.getElementById(`subject-block-${subjectId}`);
+                if (!subjectBlock) return; // Skip if block somehow doesn't exist
+                subjectBlock.classList.remove('calculated');
+                // clearAllErrors(subjectBlock); // Clear previous errors - done by validateField now
+
+
+                let currentSubjectIsValid = true;
+
+                const creditHoursInput = subjectBlock.querySelector(`[name="credit_hours_${subjectId}"]`);
+                if (!validateField(creditHoursInput, val => !isNaN(val) && val > 0, "Valid credit hours required (e.g., 3).", subjectBlock)) {
+                    currentSubjectIsValid = false;
+                }
                 const creditHours = parseFloat(creditHoursInput.value);
-                const errorSpan = document.getElementById(`error-credit-${subjectId}`);
 
-                if (isNaN(creditHours) || creditHours <= 0) {
-                    errorSpan.textContent = "Please enter valid credit hours";
-                    continue;
-                }
 
-                errorSpan.textContent = "";
-
-                const hasFinalRadio = document.querySelector(`[name="has_final_${subjectId}"]:checked`);
+                const hasFinalRadio = subjectBlock.querySelector(`[name="has_final_${subjectId}"]:checked`);
                 if (!hasFinalRadio) {
-                    alert(`Please select whether Subject ${subjectId} has a final exam or not.`);
-                    continue;
+                    const radioGroupLabel = subjectBlock.querySelector('label[for*="final-yes"]'); // find a relevant label
+                    showError(null, radioGroupLabel ? radioGroupLabel.nextElementSibling.querySelector('.error-message') : subjectBlock.querySelector('.error-message'), `Select if Subject ${subjectId} has a final.`);
+                    currentSubjectIsValid = false;
                 }
+                const hasFinal = hasFinalRadio ? hasFinalRadio.value === 'yes' : false;
 
-                const hasFinal = hasFinalRadio.value === 'yes';
-                const numPartsInput = document.querySelector(`[name="cw_parts_${subjectId}"]`);
+                const numPartsInput = subjectBlock.querySelector(`[name="cw_parts_${subjectId}"]`);
+                if (!validateField(numPartsInput, val => !isNaN(val) && val >= 1 && val <=10, "Enter 1-10 parts.", subjectBlock)) {
+                    currentSubjectIsValid = false;
+                }
                 const numParts = parseInt(numPartsInput.value);
 
-                if (isNaN(numParts) || numParts < 1) {
-                    alert(`Please enter a valid number of coursework parts for Subject ${subjectId}`);
-                    continue;
-                }
 
-                let courseworkTotal = 0;
-                let totalRatio = 0;
+                let courseworkWeightedSum = 0;
+                let totalCwRatioSum = 0;
 
                 for (let i = 1; i <= numParts; i++) {
-                    const markInput = document.querySelector(`[name="cw_mark_${subjectId}_${i}"]`);
-                    const ratioInput = document.querySelector(`[name="cw_ratio_${subjectId}_${i}"]`);
-                    const mark = parseFloat(markInput.value || 0);
-                    const ratio = parseFloat(ratioInput.value || 0);
+                    const markInput = subjectBlock.querySelector(`[name="cw_mark_${subjectId}_${i}"]`);
+                    const ratioInput = subjectBlock.querySelector(`[name="cw_ratio_${subjectId}_${i}"]`);
 
-                    if (isNaN(mark) || mark < 0 || mark > 100 || isNaN(ratio) || ratio < 0 || ratio > 100) {
-                        alert(`Please enter valid marks (0-100) and ratios (0-100) for Coursework Part ${i} of Subject ${subjectId}`);
-                        return;
+                    if (!validateField(markInput, val => !isNaN(val) && val >= 0 && val <= 100, "Mark: 0-100.", subjectBlock)) {
+                        currentSubjectIsValid = false;
+                    }
+                    if (!validateField(ratioInput, val => !isNaN(val) && val >= 0 && val <= 100, "Ratio: 0-100.", subjectBlock)) {
+                        currentSubjectIsValid = false;
                     }
 
-                    courseworkTotal += mark * (ratio / 100);
-                    totalRatio += ratio;
+                    if(currentSubjectIsValid){ // only process if inputs so far are good for this part
+                        courseworkWeightedSum += parseFloat(markInput.value) * (parseFloat(ratioInput.value) / 100);
+                        totalCwRatioSum += parseFloat(ratioInput.value);
+                    }
                 }
 
-                if (totalRatio !== 100) {
-                    alert(`The sum of coursework ratios for Subject ${subjectId} must equal 100%. Currently it is ${totalRatio}%.`);
+
+                if (Math.round(totalCwRatioSum) !== 100 && numParts > 0) { // Check only if there are parts
+                    const ratioWarningDisplay = document.getElementById(`cw-ratio-warning-${subjectId}`);
+                    if (ratioWarningDisplay) ratioWarningDisplay.textContent = `Coursework ratios must sum to 100%. Currently ${totalCwRatioSum.toFixed(0)}%.`;
+                    // No need to call showError directly as updateTotalCwRatio handles the visual warning.
+                    currentSubjectIsValid = false;
+                } else if (numParts > 0) { // if sum is 100, clear specific warning
+                     const ratioWarningDisplay = document.getElementById(`cw-ratio-warning-${subjectId}`);
+                     if(ratioWarningDisplay) ratioWarningDisplay.textContent = "";
+                }
+
+
+                let overallSubjectMark;
+                let [cwOverallRatio, finalOverallRatio] = [1, 0];
+
+                if (hasFinal) {
+                    const finalMarkInput = subjectBlock.querySelector(`[name="final_mark_${subjectId}"]`);
+                     if (!validateField(finalMarkInput, val => !isNaN(val) && val >= 0 && val <= 100, "Final mark: 0-100.", subjectBlock)) {
+                        currentSubjectIsValid = false;
+                    }
+                    if(currentSubjectIsValid){
+                        [cwOverallRatio, finalOverallRatio] = getRatios(subjectId);
+                        overallSubjectMark = courseworkWeightedSum * cwOverallRatio + parseFloat(finalMarkInput.value) * finalOverallRatio;
+                    }
+                } else {
+                    overallSubjectMark = courseworkWeightedSum;
+                }
+
+                if (!currentSubjectIsValid) {
+                    allInputsValidOverall = false;
+                    // Don't proceed to display results for this subject if it's invalid
+                    return; // Skips this subject in the forEach loop
+                }
+
+                const gradePoint = getGradePoint(overallSubjectMark);
+                totalCredits += creditHours;
+                totalWeightedGradePoints += gradePoint * creditHours;
+
+                const subjectName = subjectBlock.querySelector(`[name="subject_name_${subjectId}"]`).value || `Subject ${subjectId}`;
+                subjectResultsHTML += generateSubjectResultCard(subjectName, overallSubjectMark, gradePoint, cwOverallRatio, finalOverallRatio, hasFinal);
+                subjectResultsHTML += generateGradePredictionHTML(subjectName, courseworkWeightedSum, cwOverallRatio, finalOverallRatio, hasFinal, overallSubjectMark);
+                subjectBlock.classList.add('calculated');
+            });
+
+            setTimeout(() => {
+                calculateGpaBtn.disabled = false;
+                calculateGpaBtn.innerHTML = '<i class="fas fa-calculator"></i> Calculate GPA';
+
+                if (!allInputsValidOverall) {
+                    resultsSection.style.display = 'none';
+                    showToast("Please fix errors in red before calculating.");
                     return;
                 }
 
-                let totalMark, cwRatio, finalRatio;
-                if (hasFinal) {
-                    const finalMarkInput = document.querySelector(`[name="final_mark_${subjectId}"]`);
-                    const finalMark = parseFloat(finalMarkInput.value);
-                    if (isNaN(finalMark) || finalMark < 0 || finalMark > 100) {
-                        alert(`Please enter valid final exam marks (0-100) for Subject ${subjectId}`);
-                        return;
-                    }
-                    [cwRatio, finalRatio] = getRatios(subjectId);
-                    totalMark = courseworkTotal * cwRatio + finalMark * finalRatio;
-                } else {
-                    totalMark = courseworkTotal;
-                    cwRatio = 1;
-                    finalRatio = 0;
+                if (activeSubjects.size === 0) {
+                    showToast("Add at least one subject.");
+                    resultsSection.style.display = 'none';
+                    return;
+                }
+                if (totalCredits === 0 && activeSubjects.size > 0) { // Check if subjects exist but credits are zero
+                    showToast("Ensure subjects have valid credit hours (>0).");
+                    resultsSection.style.display = 'none';
+                    return;
+                }
+                 if (totalCredits === 0) { // General case if no valid subjects processed
+                    resultsSection.style.display = 'none';
+                    return;
                 }
 
-                const grade = calculateGrade(totalMark);
-                totalCredits += creditHours;
-                totalWeightedGrade += grade * creditHours;
 
-                subjectResults += displayResults(subjectId, totalMark, grade, cwRatio, finalRatio, hasFinal);
-                subjectResults += predictGrade(subjectId, courseworkTotal, cwRatio, finalRatio, hasFinal);
-            }
-
-            if (totalCredits === 0) {
-                alert("Please add at least one subject with valid credit hours.");
-                return;
-            }
-
-            const overallGPA = totalWeightedGrade / totalCredits;
-            document.getElementById('subject-results').innerHTML = subjectResults;
-            document.getElementById('overall-GPA').textContent = overallGPA.toFixed(2);
+                const finalGPA = totalWeightedGradePoints / totalCredits;
+                subjectResultsDisplay.innerHTML = subjectResultsHTML;
+                overallGPADisplay.textContent = finalGPA.toFixed(2);
+                resultsSection.style.display = 'block';
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+                saveData();
+            }, 300);
         }
-        function predictGrade(subjectId, courseworkMark, cwRatio, finalRatio, hasFinal) {
-            const gradeThresholds = [
-                { grade: 'A', threshold: 80 },
-                { grade: 'A-', threshold: 75 },
-                { grade: 'B+', threshold: 70 },
-                { grade: 'B', threshold: 65 },
-                { grade: 'B-', threshold: 60 },
-                { grade: 'C+', threshold: 55 },
-                { grade: 'C', threshold: 50 },
-                { grade: 'F', threshold: 0 }
+
+        function validateField(inputElement, validationFn, errorMessage, subjectBlockContext) {
+            if (!inputElement) return false;
+            const value = inputElement.type === 'number' ? parseFloat(inputElement.value) : inputElement.value;
+            let errorSpan = null;
+            // Try to find an error span immediately following the input or its parent div
+            if (inputElement.nextElementSibling && inputElement.nextElementSibling.classList.contains('error-message')) {
+                errorSpan = inputElement.nextElementSibling;
+            } else if (inputElement.parentElement.nextElementSibling && inputElement.parentElement.nextElementSibling.classList.contains('error-message')) {
+                 errorSpan = inputElement.parentElement.nextElementSibling;
+            } else { // Fallback to a generic error span within the subjectBlock if specific one isn't found
+                 if(subjectBlockContext) errorSpan = subjectBlockContext.querySelector(`#error-${inputElement.name.split('_')[1]}-${inputElement.name.split('_')[0]}`); // e.g. #error-credit-1
+            }
+
+
+            if (validationFn(value)) {
+                clearError(inputElement, errorSpan);
+                return true;
+            } else {
+                showError(inputElement, errorSpan, errorMessage);
+                return false;
+            }
+        }
+
+        function showError(inputElement, errorSpan, message) {
+            if (inputElement) inputElement.classList.add('input-error');
+            if (errorSpan) {
+                errorSpan.textContent = message;
+                errorSpan.style.display = 'block'; // Ensure it's visible
+            }
+        }
+
+        function clearError(inputElement, errorSpan) {
+            if (inputElement) inputElement.classList.remove('input-error');
+            if (errorSpan) {
+                errorSpan.textContent = '';
+                // errorSpan.style.display = 'none'; // Better to let CSS handle this or just clear text
+            }
+        }
+
+        function getGradePoint(mark) {
+            if (mark >= 90) return 4.0000;
+            if (mark >= 80) return 4.0000;
+            if (mark >= 75) return 3.6666;
+            if (mark >= 70) return 3.3333;
+            if (mark >= 65) return 3.0000;
+            if (mark >= 60) return 2.6666;
+            if (mark >= 55) return 2.3333;
+            if (mark >= 50) return 2.0000;
+            return 0.0;
+        }
+
+        function generateSubjectResultCard(subjectName, totalMark, gradePoint, cwRatio, finalRatio, hasFinal) {
+            return `
+                <div class="result-card">
+                    <h3><i class="fas fa-book-reader"></i> ${subjectName}</h3>
+                    <p><i class="fas fa-chart-line"></i> Total Marks: <strong>${totalMark.toFixed(2)}%</strong></p>
+                    <p><i class="fas fa-star"></i> Subject GPA: <strong>${gradePoint.toFixed(2)}</strong> (${getGradeLetter(totalMark)})</p>
+                    ${hasFinal ? `<p><i class="fas fa-columns"></i> Split: CW ${(cwRatio * 100).toFixed(0)}% / Final ${(finalRatio * 100).toFixed(0)}%</p>` : '<p><i class="fas fa-tasks"></i> Coursework Only</p>'}
+                </div>
+            `;
+        }
+         function getGradeLetter(mark) {
+            if (mark >= 90) return 'A+';
+            if (mark >= 80) return 'A';
+            if (mark >= 75) return 'A-';
+            if (mark >= 70) return 'B+';
+            if (mark >= 65) return 'B';
+            if (mark >= 60) return 'B-';
+            if (mark >= 55) return 'C+';
+            if (mark >= 50) return 'C';
+            if (mark >= 45) return 'D';
+            return 'F';
+        }
+
+        function generateGradePredictionHTML(subjectName, courseworkMark, cwRatio, finalRatio, hasFinal, currentTotalMark) {
+            const gradeBoundaries = [
+                { name: 'A+', points: 4.0000, threshold: 90 }, 
+                { name: 'A', points: 4.0000, threshold: 80 }, { name: 'A-', points: 3.6666, threshold: 75 },
+                { name: 'B+', points: 3.3333, threshold: 70 }, { name: 'B', points: 3.0000, threshold: 65 },
+                { name: 'B-', points: 2.6666, threshold: 60 }, { name: 'C+', points: 2.3333, threshold: 55 },
+                { name: 'C', points: 2.0000, threshold: 50 },
+                { name: 'F', points: 0.0000, threshold: 0 }
             ];
 
+            let predictionHTML = `<div class="grade-prediction"><h4><i class="fas fa-magic"></i> Grade Outlook for ${subjectName}</h4>`;
+            const currentGradeObj = gradeBoundaries.find(g => currentTotalMark >= g.threshold);
+            predictionHTML += `<p>Current Coursework Mark: <strong>${courseworkMark.toFixed(2)}%</strong>. Current Overall: <strong>${currentTotalMark.toFixed(2)}% (${currentGradeObj?.name || 'N/A'})</strong></p>`;
+
+
             if (!hasFinal) {
-                const currentGrade = gradeThresholds.find(g => courseworkMark >= g.threshold);
-                return `
-                    <div class="grade-prediction">
-                        <h4>Grade Prediction for Subject ${subjectId}</h4>
-                        <p>Based on your coursework mark of ${courseworkMark.toFixed(2)}%, your final grade is: ${currentGrade.grade}</p>
-                    </div>
-                `;
-            }
-
-            const requiredTotalForA = gradeThresholds[0].threshold;
-            const requiredFinalForA = (requiredTotalForA - courseworkMark * cwRatio) / finalRatio;
-
-            if (requiredFinalForA <= 100) {
-                return `
-                    <div class="grade-prediction">
-                        <h4>Grade Prediction for Subject ${subjectId}</h4>
-                        <p>Your current coursework mark: ${courseworkMark.toFixed(2)}%</p>
-                        <p>To achieve a grade A (${requiredTotalForA}% or above), you need to score at least ${requiredFinalForA.toFixed(2)}% in your final exam.</p>
-                    </div>
-                `;
+                predictionHTML += `<p>This subject is based on coursework only. Your final grade is <strong>${currentGradeObj?.name || 'N/A'}</strong>.</p>`;
             } else {
-                let maxAchievableGrade = gradeThresholds[gradeThresholds.length - 1];
-                let requiredFinalMark = 0;
+                if (finalRatio === 0) {
+                     predictionHTML += `<p class="warning-message">Final exam ratio is 0%. Grade is based on coursework.</p>`;
+                } else {
+                    let foundHigherTarget = false;
+                    for (const grade of gradeBoundaries) {
+                        if (grade.name === 'F') continue;
+                        if (grade.threshold <= currentTotalMark && grade.threshold > 0) continue; // Skip grades already achieved or lower
 
-                for (let i = 1; i < gradeThresholds.length; i++) {
-                    const requiredTotal = gradeThresholds[i].threshold;
-                    const requiredFinal = (requiredTotal - courseworkMark * cwRatio) / finalRatio;
+                        const requiredFinalForGrade = (grade.threshold - (courseworkMark * cwRatio)) / finalRatio;
 
-                    if (requiredFinal <= 100) {
-                        maxAchievableGrade = gradeThresholds[i];
-                        requiredFinalMark = requiredFinal;
-                        break;
+                        if (requiredFinalForGrade <= 100 && requiredFinalForGrade >=0) {
+                            predictionHTML += `<p>To get <strong>${grade.name}</strong> (${grade.threshold}%+), you need <strong>~${Math.max(0, requiredFinalForGrade).toFixed(2)}%</strong> in the final.</p>`;
+                            foundHigherTarget = true;
+                        } else if (requiredFinalForGrade > 100 && !foundHigherTarget) {
+                            // Only show this once for the first unattainable higher grade
+                            predictionHTML += `<p class="warning-message">Achieving a grade higher than <strong>${currentGradeObj?.name || 'your current'}</strong> may not be possible, even with 100% in the final.</p>`;
+                            foundHigherTarget = true; // Prevents multiple "not possible" messages
+                            break; // No need to check further higher grades
+                        }
+                    }
+                     if (currentTotalMark < gradeBoundaries.find(g=>g.name === 'C').threshold && finalRatio > 0) {
+                        const neededForPass = (gradeBoundaries.find(g=>g.name === 'C').threshold - (courseworkMark * cwRatio)) / finalRatio;
+                        if(neededForPass >= 0 && neededForPass <= 100) {
+                            predictionHTML += `<p class="warning-message">To pass (C grade - 50%), you need at least <strong>${neededForPass.toFixed(2)}%</strong> in the final.</p>`;
+                        } else if (neededForPass > 100) {
+                            predictionHTML += `<p class="warning-message">It may not be possible to achieve a passing grade (C) based on current coursework.</p>`;
+                        }
+                    } else if (!foundHigherTarget && currentGradeObj?.name !== 'A' && currentGradeObj?.name !== 'A-') {
+                         predictionHTML += `<p>Focus on maximizing your final exam score to maintain or improve your current standing.</p>`;
                     }
                 }
-
-                return `
-                    <div class="grade-prediction">
-                        <h4>Grade Prediction for Subject ${subjectId}</h4>
-                        <p class="warning">Based on your current coursework mark of ${courseworkMark.toFixed(2)}%, it's not possible to achieve a grade A in this subject.</p>
-                        <p>The maximum grade you can achieve is: ${maxAchievableGrade.grade}</p>
-                        <p>To achieve this grade, you need to score at least ${requiredFinalMark.toFixed(2)}% in your final exam.</p>
-                    </div>
-                `;
             }
+            predictionHTML += `</div>`;
+            return predictionHTML;
         }
 
-        function calculateGrade(mark) {
-            if (mark >= 80) return 4.0;
-            if (mark >= 75) return 3.67;
-            if (mark >= 70) return 3.33;
-            if (mark >= 65) return 3.0;
-            if (mark >= 60) return 2.67;
-            if (mark >= 55) return 2.33;
-            if (mark >= 50) return 2.0;
-            return 0.0;
+
+        function confirmRemoveSubject(subjectId) {
+            const subjectNameInput = document.querySelector(`[name="subject_name_${subjectId}"]`);
+            const subjectDisplayName = subjectNameInput ? subjectNameInput.value : `Subject ${subjectId}`;
+            if (confirm(`Are you sure you want to remove "${subjectDisplayName}" and its data?`)) {
+                removeSubject(subjectId);
+            }
         }
 
         function removeSubject(subjectId) {
             const subjectBlock = document.getElementById(`subject-block-${subjectId}`);
-            subjectBlock.remove();
-            activeSubjects.delete(subjectId);
+            if (subjectBlock) {
+                // Simple immediate removal, animation can be added via CSS if desired
+                subjectBlock.remove();
+                activeSubjects.delete(subjectId);
+                updateEmptyState();
+                saveData();
+                const subjectNameInput = subjectBlock.querySelector(`[name="subject_name_${subjectId}"]`);
+                const subjectDisplayName = subjectNameInput ? subjectNameInput.value : `Subject ${subjectId}`;
+                showToast(`"${subjectDisplayName}" removed.`);
+                if(activeSubjects.size > 0) calculateGPA();
+                else {
+                     overallGPADisplay.textContent = "0.00";
+                     resultsSection.style.display = 'none';
+                }
+            }
+        }
+
+        let saveTimeout;
+        function saveDataDebounced() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(saveData, 1200);
         }
 
         function saveData() {
             const subjectsData = [];
+            activeSubjects.forEach(subjectId => {
+                const subjectBlock = document.getElementById(`subject-block-${subjectId}`);
+                if (!subjectBlock) return;
 
-            for (const subjectId of activeSubjects) {
-                const subjectName = document.querySelector(`[name="subject_name_${subjectId}"]`).value;
-                const creditHours = parseFloat(document.querySelector(`[name="credit_hours_${subjectId}"]`).value);
-                const hasFinalElement = document.querySelector(`[name="has_final_${subjectId}"]:checked`);
-                const hasFinal = hasFinalElement ? hasFinalElement.value : 'no';
-                const finalMark = hasFinal === 'yes' ? parseFloat(document.querySelector(`[name="final_mark_${subjectId}"]`).value) : null;
-                const numPartsElement = document.querySelector(`[name="cw_parts_${subjectId}"]`);
-                const numParts = numPartsElement ? parseInt(numPartsElement.value) : 0;
+                const subjectName = subjectBlock.querySelector(`[name="subject_name_${subjectId}"]`).value;
+                const creditHours = subjectBlock.querySelector(`[name="credit_hours_${subjectId}"]`).value;
+                const hasFinalRadio = subjectBlock.querySelector(`[name="has_final_${subjectId}"]:checked`);
+                const hasFinal = hasFinalRadio ? hasFinalRadio.value : 'no';
+                const ratioSplitInput = subjectBlock.querySelector(`[name="ratio_split_${subjectId}"]:checked`);
+                const ratioSplit = ratioSplitInput ? ratioSplitInput.value : '50-50';
+                const finalMark = hasFinal === 'yes' ? subjectBlock.querySelector(`[name="final_mark_${subjectId}"]`).value : null;
+                const cwPartsCountInput = subjectBlock.querySelector(`[name="cw_parts_${subjectId}"]`);
+                const cwPartsCount = cwPartsCountInput ? cwPartsCountInput.value : '0';
 
-                const cwMarks = [];
-                for (let i = 1; i <= numParts; i++) {
-                    const markElement = document.querySelector(`[name="cw_mark_${subjectId}_${i}"]`);
-                    const mark = markElement ? parseFloat(markElement.value) : 0;
-                    cwMarks.push(mark);
-                }
 
-                subjectsData.push({
-                    subjectId,
-                    subjectName,
-                    creditHours,
-                    hasFinal,
-                    finalMark,
-                    cwMarks,
-                });
-            }
-
-            localStorage.setItem('subjectsData', JSON.stringify(subjectsData));
-        }
-
-        // Update the loadData function to handle subject names
-        function loadData() {
-            const savedData = localStorage.getItem('subjectsData');
-            if (savedData) {
-                const subjectsData = JSON.parse(savedData);
-                subjectsData.forEach(data => {
-                    addSubject();
-                    const subjectId = data.subjectId;
-
-                    document.querySelector(`[name="subject_name_${subjectId}"]`).value = data.subjectName;
-                    document.querySelector(`[name="credit_hours_${subjectId}"]`).value = data.creditHours;
-
-                    const hasFinalElement = document.querySelector(`[name="has_final_${subjectId}"][value="${data.hasFinal}"]`);
-                    if (hasFinalElement) {
-                        hasFinalElement.checked = true;
-                        if (data.hasFinal === 'yes') {
-                            toggleFinal(subjectId, true);
-                            document.querySelector(`[name="final_mark_${subjectId}"]`).value = data.finalMark;
-                        }
-                    }
-
-                    const cwPartsInput = document.querySelector(`[name="cw_parts_${subjectId}"]`);
-                    if (cwPartsInput) {
-                        cwPartsInput.value = data.cwMarks.length;
-                        addCourseworkParts(subjectId);
-
-                        data.cwMarks.forEach((mark, index) => {
-                            const markInput = document.querySelector(`[name="cw_mark_${subjectId}_${index + 1}"]`);
-                            if (markInput) markInput.value = mark;
+                const cwData = [];
+                 if (parseInt(cwPartsCount) > 0) {
+                    for (let i = 1; i <= parseInt(cwPartsCount); i++) {
+                        const markInput = subjectBlock.querySelector(`[name="cw_mark_${subjectId}_${i}"]`);
+                        const ratioInput = subjectBlock.querySelector(`[name="cw_ratio_${subjectId}_${i}"]`);
+                        cwData.push({
+                            partNum: i,
+                            mark: markInput ? markInput.value : '',
+                            ratio: ratioInput ? ratioInput.value : ''
                         });
                     }
+                }
+
+
+                subjectsData.push({
+                    subjectId, subjectName, creditHours, hasFinal, ratioSplit, finalMark,
+                    cwPartsCount: parseInt(cwPartsCount) || 0, cwData
                 });
+            });
+            localStorage.setItem('GPACalculatorData_v2', JSON.stringify(subjectsData)); // Changed key for new structure
+            console.log("Data saved.");
+            // showToast("Progress auto-saved!"); // Can be a bit noisy if called too often
+        }
+
+        function loadData() {
+            const savedDataJSON = localStorage.getItem('GPACalculatorData_v2'); // Use new key
+            if (savedDataJSON) {
+                const savedSubjects = JSON.parse(savedDataJSON);
+                if (savedSubjects.length > 0) {
+                    subjectCount = 0;
+                    activeSubjects.clear();
+
+                    savedSubjects.forEach(data => {
+                        if (data.subjectId > subjectCount) subjectCount = data.subjectId;
+                        activeSubjects.add(data.subjectId);
+                        addSubject(data);
+                    });
+                } else {
+                     addSubject();
+                }
+            } else {
+                addSubject();
+            }
+            updateEmptyState();
+        }
+
+        function resetAllData() {
+            if (confirm("Are you sure you want to reset all subjects and data? This cannot be undone.")) {
+                localStorage.removeItem('GPACalculatorData_v2');
+                subjectContainer.innerHTML = '';
+                activeSubjects.clear();
+                subjectCount = 0;
+                addSubject();
+                resultsSection.style.display = 'none';
+                overallGPADisplay.textContent = "0.00";
+                updateEmptyState();
+                showToast("All data has been reset.");
             }
         }
 
-        // Update the displayResults function to use subject names
-        function displayResults(subjectId, totalMark, grade, cwRatio, finalRatio, hasFinal) {
-            const subjectName = document.querySelector(`[name="subject_name_${subjectId}"]`).value;
-            return `
-                <div class="result-card">
-                    <h3><i class="fas fa-book"></i> ${subjectName}</h3>
-                    <p><i class="fas fa-chart-line"></i> Total Marks: ${totalMark.toFixed(2)}%</p>
-                    <p><i class="fas fa-star"></i> Subject GPA: ${grade.toFixed(2)}</p>
-                    ${hasFinal ? `<p><i class="fas fa-percentage"></i> Split: Coursework ${(cwRatio * 100).toFixed(0)}% - Final ${(finalRatio * 100).toFixed(0)}%</p>` : ''}
-                </div>
-            `;
-        }
-        // Call loadData when the DOM is fully loaded
+
         document.addEventListener('DOMContentLoaded', function () {
             loadData();
-            document.getElementById('add-subject-btn').addEventListener('click', addSubject);
-            document.getElementById('calculate-GPA-btn').addEventListener('click', () => {
-                calculateGPA();
-                saveData(); // Save data after calculation
-            });
+            document.getElementById('add-subject-btn').addEventListener('click', () => addSubject()); // Add a new blank subject
+            calculateGpaBtn.addEventListener('click', calculateGPA);
+            document.getElementById('reset-all-btn').addEventListener('click', resetAllData);
         });
 
-        // Call saveData when the user leaves the page
         window.addEventListener('beforeunload', saveData);
-
 
     </script>
 </body>
-
-
-
 </html>
