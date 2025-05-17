@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional GPA Calculator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --success-color: #16a34a;
+            --danger-color: #dc2626;
+            --background-color: #f1f5f9;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: var(--card-background);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .subject-block {
+            background: var(--card-background);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .subject-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.15);
+        }
+
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .subject-header h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: var(--background-color);
+            border-radius: 0.5rem;
+        }
+
+        .radio-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 0.75rem;
+            text-align: center;
+            background: var(--card-background);
+            border: 2px solid var(--border-color);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .radio-option input[type="radio"]:checked+label {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #15803d;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .results-section {
+            background: var(--card-background);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .result-card {
+            background: var(--background-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .overall-GPA {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 0.5rem;
+        }
+
+        .overall-GPA h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(1rem);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subject-block {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .grade-prediction {
+            background-color: #e9ecef;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .grade-prediction h4 {
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+
+        .grade-prediction p {
+            margin-bottom: 0.5rem;
+        }
+
+        .grade-prediction .warning {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .subject-name {
+            flex: 1;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .subject-name input {
+            padding: 0.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            width: 100%;
+            max-width: 300px;
+            transition: border-color 0.2s;
+        }
+
+        .subject-name input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-calculator"></i> Professional GPA Calculator</h1>
+            <p>Calculate your Cumulative Point Average (GPA) with ease</p>
+        </div>
+
+        <form id="GPA-form">
+            <div id="subject-container">
+                <!-- Subjects will be added here dynamically -->
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn btn-primary" onclick="addSubject()">
+                    <i class="fas fa-plus"></i> Add Subject
+                </button>
+                <button type="button" class="btn btn-success" onclick="calculateGPA()">
+                    <i class="fas fa-calculator"></i> Calculate GPA
+                </button>
+            </div>
+        </form>
+
+        <div class="results-section">
+            <div class="results-header">
+                <h2><i class="fas fa-chart-bar"></i> Results</h2>
+            </div>
+            <div id="subject-results"></div>
+            <div class="overall-GPA">
+                <h2>Overall GPA</h2>
+                <span id="overall-GPA" style="font-size: 3rem;">0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let subjectCount = 0;
+        let activeSubjects = new Set();
+
+        // Ensure DOM is fully loaded before attaching event listeners
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('add-subject-btn').addEventListener('click', addSubject);
+            document.getElementById('calculate-GPA-btn').addEventListener('click', calculateGPA);
+        });
+
+        function addSubject() {
+            subjectCount++;
+            activeSubjects.add(subjectCount);
+
+            const subjectContainer = document.getElementById('subject-container');
+            const subjectBlock = document.createElement('div');
+            subjectBlock.className = 'subject-block';
+            subjectBlock.id = `subject-block-${subjectCount}`;
+            subjectBlock.innerHTML = `
+                <div class="subject-header">
+                    <div class="subject-name">
+                        <i class="fas fa-book"></i>
+                        <input type="text" 
+                               name="subject_name_${subjectCount}" 
+                               value="Subject ${subjectCount}"
+                               placeholder="Enter subject name"
+                               onchange="saveData()">
+                    </div>
+                    <button type="button" class="btn btn-danger" onclick="removeSubject(${subjectCount})">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-clock"></i> Credit Hours</label>
+                    <input type="number" name="credit_hours_${subjectCount}" required min="1" placeholder="Enter credit hours">
+                    <span class="error-message" id="error-credit-${subjectCount}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-tasks"></i> Has Final Exam</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="final-yes-${subjectCount}" name="has_final_${subjectCount}" value="yes" onchange="toggleFinal(${subjectCount}, true)">
+                            <label for="final-yes-${subjectCount}">Yes</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="final-no-${subjectCount}" name="has_final_${subjectCount}" value="no" onchange="toggleFinal(${subjectCount}, false)">
+                            <label for="final-no-${subjectCount}">No</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="final-section-${subjectCount}" style="display: none;">
+                    <div class="form-group">
+                        <label><i class="fas fa-percentage"></i> Coursework to Final Exam Ratio</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="ratio-50-50-${subjectCount}" name="ratio_split_${subjectCount}" value="50-50">
+                                <label for="ratio-50-50-${subjectCount}">50:50</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="ratio-60-40-${subjectCount}" name="ratio_split_${subjectCount}" value="60-40">
+                                <label for="ratio-60-40-${subjectCount}">60:40</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="ratio-70-30-${subjectCount}" name="ratio_split_${subjectCount}" value="70-30">
+                                <label for="ratio-70-30-${subjectCount}">70:30</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-pen"></i> Final Exam Marks</label>
+                        <input type="number" name="final_mark_${subjectCount}" min="0" max="100" placeholder="Enter final exam marks (out of 100)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-list-ol"></i> Number of Coursework Parts</label>
+                    <input type="number" name="cw_parts_${subjectCount}" required min="1" onchange="addCourseworkParts(${subjectCount})" placeholder="Enter number of coursework parts">
+                    <span class="error-message" id="error-parts-${subjectCount}"></span>
+                </div>
+
+                <div id="cw-parts-section-${subjectCount}">
+                    <!-- Coursework parts will be added here dynamically -->
+                </div>
+            `;
+
+            subjectContainer.appendChild(subjectBlock);
+        }
+
+
+        function toggleFinal(subjectId, hasFinal) {
+            const finalSection = document.getElementById(`final-section-${subjectId}`);
+            finalSection.style.display = hasFinal ? 'block' : 'none';
+        }
+
+        function getRatios(subjectId) {
+            const ratioInputs = document.getElementsByName(`ratio_split_${subjectId}`);
+            for (const input of ratioInputs) {
+                if (input.checked) {
+                    const [cw, final] = input.value.split('-');
+                    return [parseInt(cw) / 100, parseInt(final) / 100];
+                }
+            }
+            return [0.5, 0.5]; // Default to 50-50 if none selected
+        }
+
+        function addCourseworkParts(subjectId) {
+            const numPartsInput = document.querySelector(`[name="cw_parts_${subjectId}"]`);
+            const numParts = parseInt(numPartsInput.value);
+            const cwPartsSection = document.getElementById(`cw-parts-section-${subjectId}`);
+            const errorSpan = document.getElementById(`error-parts-${subjectId}`);
+
+            if (isNaN(numParts) || numParts < 1) {
+                errorSpan.textContent = "Please enter a valid number of coursework parts (minimum 1)";
+                return;
+            }
+
+            errorSpan.textContent = "";
+            cwPartsSection.innerHTML = '';
+
+            for (let i = 1; i <= numParts; i++) {
+                const partDiv = document.createElement('div');
+                partDiv.className = 'form-group';
+                partDiv.innerHTML = `
+                <label><i class="fas fa-file-alt"></i> Coursework Part ${i} Marks</label>
+                <input type="number" name="cw_mark_${subjectId}_${i}" min="0" max="100" placeholder="Enter marks (out of 100)">
+                <label><i class="fas fa-balance-scale"></i> Coursework Part ${i} Ratio</label>
+                <input type="number" name="cw_ratio_${subjectId}_${i}" min="0" max="100" placeholder="Enter ratio percentage">
+            `;
+                cwPartsSection.appendChild(partDiv);
+            }
+        }
+
+        function calculateGPA() {
+            let totalCredits = 0;
+            let totalWeightedGrade = 0;
+            let subjectResults = '';
+
+            for (const subjectId of activeSubjects) {
+                const creditHoursInput = document.querySelector(`[name="credit_hours_${subjectId}"]`);
+                const creditHours = parseFloat(creditHoursInput.value);
+                const errorSpan = document.getElementById(`error-credit-${subjectId}`);
+
+                if (isNaN(creditHours) || creditHours <= 0) {
+                    errorSpan.textContent = "Please enter valid credit hours";
+                    continue;
+                }
+
+                errorSpan.textContent = "";
+
+                const hasFinalRadio = document.querySelector(`[name="has_final_${subjectId}"]:checked`);
+                if (!hasFinalRadio) {
+                    alert(`Please select whether Subject ${subjectId} has a final exam or not.`);
+                    continue;
+                }
+
+                const hasFinal = hasFinalRadio.value === 'yes';
+                const numPartsInput = document.querySelector(`[name="cw_parts_${subjectId}"]`);
+                const numParts = parseInt(numPartsInput.value);
+
+                if (isNaN(numParts) || numParts < 1) {
+                    alert(`Please enter a valid number of coursework parts for Subject ${subjectId}`);
+                    continue;
+                }
+
+                let courseworkTotal = 0;
+                let totalRatio = 0;
+
+                for (let i = 1; i <= numParts; i++) {
+                    const markInput = document.querySelector(`[name="cw_mark_${subjectId}_${i}"]`);
+                    const ratioInput = document.querySelector(`[name="cw_ratio_${subjectId}_${i}"]`);
+                    const mark = parseFloat(markInput.value || 0);
+                    const ratio = parseFloat(ratioInput.value || 0);
+
+                    if (isNaN(mark) || mark < 0 || mark > 100 || isNaN(ratio) || ratio < 0 || ratio > 100) {
+                        alert(`Please enter valid marks (0-100) and ratios (0-100) for Coursework Part ${i} of Subject ${subjectId}`);
+                        return;
+                    }
+
+                    courseworkTotal += mark * (ratio / 100);
+                    totalRatio += ratio;
+                }
+
+                if (totalRatio !== 100) {
+                    alert(`The sum of coursework ratios for Subject ${subjectId} must equal 100%. Currently it is ${totalRatio}%.`);
+                    return;
+                }
+
+                let totalMark, cwRatio, finalRatio;
+                if (hasFinal) {
+                    const finalMarkInput = document.querySelector(`[name="final_mark_${subjectId}"]`);
+                    const finalMark = parseFloat(finalMarkInput.value);
+                    if (isNaN(finalMark) || finalMark < 0 || finalMark > 100) {
+                        alert(`Please enter valid final exam marks (0-100) for Subject ${subjectId}`);
+                        return;
+                    }
+                    [cwRatio, finalRatio] = getRatios(subjectId);
+                    totalMark = courseworkTotal * cwRatio + finalMark * finalRatio;
+                } else {
+                    totalMark = courseworkTotal;
+                    cwRatio = 1;
+                    finalRatio = 0;
+                }
+
+                const grade = calculateGrade(totalMark);
+                totalCredits += creditHours;
+                totalWeightedGrade += grade * creditHours;
+
+                subjectResults += displayResults(subjectId, totalMark, grade, cwRatio, finalRatio, hasFinal);
+                subjectResults += predictGrade(subjectId, courseworkTotal, cwRatio, finalRatio, hasFinal);
+            }
+
+            if (totalCredits === 0) {
+                alert("Please add at least one subject with valid credit hours.");
+                return;
+            }
+
+            const overallGPA = totalWeightedGrade / totalCredits;
+            document.getElementById('subject-results').innerHTML = subjectResults;
+            document.getElementById('overall-GPA').textContent = overallGPA.toFixed(2);
+        }
+        function predictGrade(subjectId, courseworkMark, cwRatio, finalRatio, hasFinal) {
+            const gradeThresholds = [
+                { grade: 'A', threshold: 80 },
+                { grade: 'A-', threshold: 75 },
+                { grade: 'B+', threshold: 70 },
+                { grade: 'B', threshold: 65 },
+                { grade: 'B-', threshold: 60 },
+                { grade: 'C+', threshold: 55 },
+                { grade: 'C', threshold: 50 },
+                { grade: 'F', threshold: 0 }
+            ];
+
+            if (!hasFinal) {
+                const currentGrade = gradeThresholds.find(g => courseworkMark >= g.threshold);
+                return `
+                    <div class="grade-prediction">
+                        <h4>Grade Prediction for Subject ${subjectId}</h4>
+                        <p>Based on your coursework mark of ${courseworkMark.toFixed(2)}%, your final grade is: ${currentGrade.grade}</p>
+                    </div>
+                `;
+            }
+
+            const requiredTotalForA = gradeThresholds[0].threshold;
+            const requiredFinalForA = (requiredTotalForA - courseworkMark * cwRatio) / finalRatio;
+
+            if (requiredFinalForA <= 100) {
+                return `
+                    <div class="grade-prediction">
+                        <h4>Grade Prediction for Subject ${subjectId}</h4>
+                        <p>Your current coursework mark: ${courseworkMark.toFixed(2)}%</p>
+                        <p>To achieve a grade A (${requiredTotalForA}% or above), you need to score at least ${requiredFinalForA.toFixed(2)}% in your final exam.</p>
+                    </div>
+                `;
+            } else {
+                let maxAchievableGrade = gradeThresholds[gradeThresholds.length - 1];
+                let requiredFinalMark = 0;
+
+                for (let i = 1; i < gradeThresholds.length; i++) {
+                    const requiredTotal = gradeThresholds[i].threshold;
+                    const requiredFinal = (requiredTotal - courseworkMark * cwRatio) / finalRatio;
+
+                    if (requiredFinal <= 100) {
+                        maxAchievableGrade = gradeThresholds[i];
+                        requiredFinalMark = requiredFinal;
+                        break;
+                    }
+                }
+
+                return `
+                    <div class="grade-prediction">
+                        <h4>Grade Prediction for Subject ${subjectId}</h4>
+                        <p class="warning">Based on your current coursework mark of ${courseworkMark.toFixed(2)}%, it's not possible to achieve a grade A in this subject.</p>
+                        <p>The maximum grade you can achieve is: ${maxAchievableGrade.grade}</p>
+                        <p>To achieve this grade, you need to score at least ${requiredFinalMark.toFixed(2)}% in your final exam.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function calculateGrade(mark) {
+            if (mark >= 80) return 4.0;
+            if (mark >= 75) return 3.67;
+            if (mark >= 70) return 3.33;
+            if (mark >= 65) return 3.0;
+            if (mark >= 60) return 2.67;
+            if (mark >= 55) return 2.33;
+            if (mark >= 50) return 2.0;
+            return 0.0;
+        }
+
+        function removeSubject(subjectId) {
+            const subjectBlock = document.getElementById(`subject-block-${subjectId}`);
+            subjectBlock.remove();
+            activeSubjects.delete(subjectId);
+        }
+
+        function saveData() {
+            const subjectsData = [];
+
+            for (const subjectId of activeSubjects) {
+                const subjectName = document.querySelector(`[name="subject_name_${subjectId}"]`).value;
+                const creditHours = parseFloat(document.querySelector(`[name="credit_hours_${subjectId}"]`).value);
+                const hasFinalElement = document.querySelector(`[name="has_final_${subjectId}"]:checked`);
+                const hasFinal = hasFinalElement ? hasFinalElement.value : 'no';
+                const finalMark = hasFinal === 'yes' ? parseFloat(document.querySelector(`[name="final_mark_${subjectId}"]`).value) : null;
+                const numPartsElement = document.querySelector(`[name="cw_parts_${subjectId}"]`);
+                const numParts = numPartsElement ? parseInt(numPartsElement.value) : 0;
+
+                const cwMarks = [];
+                for (let i = 1; i <= numParts; i++) {
+                    const markElement = document.querySelector(`[name="cw_mark_${subjectId}_${i}"]`);
+                    const mark = markElement ? parseFloat(markElement.value) : 0;
+                    cwMarks.push(mark);
+                }
+
+                subjectsData.push({
+                    subjectId,
+                    subjectName,
+                    creditHours,
+                    hasFinal,
+                    finalMark,
+                    cwMarks,
+                });
+            }
+
+            localStorage.setItem('subjectsData', JSON.stringify(subjectsData));
+        }
+
+        // Update the loadData function to handle subject names
+        function loadData() {
+            const savedData = localStorage.getItem('subjectsData');
+            if (savedData) {
+                const subjectsData = JSON.parse(savedData);
+                subjectsData.forEach(data => {
+                    addSubject();
+                    const subjectId = data.subjectId;
+
+                    document.querySelector(`[name="subject_name_${subjectId}"]`).value = data.subjectName;
+                    document.querySelector(`[name="credit_hours_${subjectId}"]`).value = data.creditHours;
+
+                    const hasFinalElement = document.querySelector(`[name="has_final_${subjectId}"][value="${data.hasFinal}"]`);
+                    if (hasFinalElement) {
+                        hasFinalElement.checked = true;
+                        if (data.hasFinal === 'yes') {
+                            toggleFinal(subjectId, true);
+                            document.querySelector(`[name="final_mark_${subjectId}"]`).value = data.finalMark;
+                        }
+                    }
+
+                    const cwPartsInput = document.querySelector(`[name="cw_parts_${subjectId}"]`);
+                    if (cwPartsInput) {
+                        cwPartsInput.value = data.cwMarks.length;
+                        addCourseworkParts(subjectId);
+
+                        data.cwMarks.forEach((mark, index) => {
+                            const markInput = document.querySelector(`[name="cw_mark_${subjectId}_${index + 1}"]`);
+                            if (markInput) markInput.value = mark;
+                        });
+                    }
+                });
+            }
+        }
+
+        // Update the displayResults function to use subject names
+        function displayResults(subjectId, totalMark, grade, cwRatio, finalRatio, hasFinal) {
+            const subjectName = document.querySelector(`[name="subject_name_${subjectId}"]`).value;
+            return `
+                <div class="result-card">
+                    <h3><i class="fas fa-book"></i> ${subjectName}</h3>
+                    <p><i class="fas fa-chart-line"></i> Total Marks: ${totalMark.toFixed(2)}%</p>
+                    <p><i class="fas fa-star"></i> Subject GPA: ${grade.toFixed(2)}</p>
+                    ${hasFinal ? `<p><i class="fas fa-percentage"></i> Split: Coursework ${(cwRatio * 100).toFixed(0)}% - Final ${(finalRatio * 100).toFixed(0)}%</p>` : ''}
+                </div>
+            `;
+        }
+        // Call loadData when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            loadData();
+            document.getElementById('add-subject-btn').addEventListener('click', addSubject);
+            document.getElementById('calculate-GPA-btn').addEventListener('click', () => {
+                calculateGPA();
+                saveData(); // Save data after calculation
+            });
+        });
+
+        // Call saveData when the user leaves the page
+        window.addEventListener('beforeunload', saveData);
+
+
+    </script>
+</body>
+
+
+
+</html>
